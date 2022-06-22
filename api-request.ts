@@ -27,3 +27,15 @@ interface ResponseFail {
   status: PaymentStatus.FAILED,
   data: failPayload
 }
+
+function isSuccessResponse(response: ResponseSuccess | ResponseFail): response is ResponseSuccess {
+  return response.status === PaymentStatus.SUCCESS
+}
+
+function check(response: ResponseSuccess | ResponseFail): number {
+  if (isSuccessResponse(response)) {
+    return response.data.databaseId
+  } else {
+    throw new Error(response.data.errorMessage)
+  }
+}
